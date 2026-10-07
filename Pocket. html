@@ -1,643 +1,299 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PocketSmart AI - Budget Assistant</title>
+    <title>PocketSmart AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
+    <style>
+        body{
+            font-family:Arial;
+            background:#eef4ff;
+            margin:0;
+            padding:20px;
+        }
 
-body {
-    background: #f4f7fb;
-    color: #1e293b;
-}
+        .box{
+            max-width:700px;
+            margin:auto;
+            background:white;
+            padding:25px;
+            border-radius:15px;
+            box-shadow:0 5px 20px #ccc;
+        }
 
-header {
-    background: linear-gradient(135deg, #0ea5e9, #6366f1, #8b5cf6);
-    color: white;
-    padding: 50px 20px;
-    text-align: center;
-}
+        h1{
+            text-align:center;
+            color:#4f46e5;
+        }
 
-header h1 {
-    font-size: 42px;
-    margin-bottom: 10px;
-}
+        input,select,button{
+            width:100%;
+            padding:12px;
+            margin:8px 0;
+            border-radius:8px;
+            border:1px solid #ccc;
+            box-sizing:border-box;
+        }
 
-header p {
-    font-size: 18px;
-}
+        button{
+            background:#4f46e5;
+            color:white;
+            border:0;
+            cursor:pointer;
+            font-weight:bold;
+        }
 
-.container {
-    max-width: 1100px;
-    margin: -25px auto 40px;
-    background: white;
-    border-radius: 24px;
-    padding: 30px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-}
+        button:hover{
+            background:#3730a3;
+        }
 
-h2 {
-    color: #0ea5e9;
-    border-left: 5px solid #0ea5e9;
-    padding-left: 10px;
-    margin: 25px 0 15px;
-}
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:10px;
+            margin-top:20px;
+        }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-}
+        .card{
+            padding:15px;
+            background:#f1f5ff;
+            border-radius:10px;
+            text-align:center;
+        }
 
-label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 6px;
-}
+        .card b{
+            font-size:20px;
+        }
 
-input, select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    font-size: 15px;
-}
+        table{
+            width:100%;
+            margin-top:20px;
+            border-collapse:collapse;
+        }
 
-button {
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 15px;
-}
+        th,td{
+            padding:10px;
+            border-bottom:1px solid #ddd;
+            text-align:center;
+        }
 
-.add-btn {
-    background: #0ea5e9;
-    color: white;
-    margin-top: 20px;
-}
+        .delete{
+            background:#ef4444;
+            padding:7px;
+        }
 
-.add-btn:hover {
-    background: #0284c7;
-}
-
-.reset-btn {
-    background: #ef4444;
-    color: white;
-    margin-top: 20px;
-    margin-left: 10px;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.card {
-    padding: 20px;
-    border-radius: 15px;
-    background: #f0f9ff;
-    text-align: center;
-}
-
-.card h3 {
-    color: #64748b;
-    font-size: 15px;
-}
-
-.card p {
-    font-size: 25px;
-    font-weight: bold;
-    margin-top: 8px;
-    color: #0f172a;
-}
-
-.remaining {
-    background: #dcfce7;
-}
-
-.spent {
-    background: #fee2e2;
-}
-
-.savings {
-    background: #fef3c7;
-}
-
-.chart-container {
-    margin-top: 25px;
-    text-align: center;
-}
-
-canvas {
-    max-width: 500px;
-    max-height: 500px;
-    margin: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-th, td {
-    padding: 12px;
-    border-bottom: 1px solid #e2e8f0;
-    text-align: left;
-}
-
-th {
-    background: #f1f5f9;
-}
-
-.delete-btn {
-    background: #ef4444;
-    color: white;
-    padding: 7px 12px;
-    font-size: 12px;
-}
-
-.tip-box {
-    background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 15px;
-}
-
-.tip-box li {
-    margin: 10px 0;
-}
-
-.warning {
-    background: #fff7ed;
-    color: #c2410c;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 15px;
-    font-weight: bold;
-}
-
-.success {
-    background: #ecfdf5;
-    color: #047857;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 15px;
-    font-weight: bold;
-}
-
-footer {
-    text-align: center;
-    color: #64748b;
-    margin-top: 30px;
-}
-
-@media(max-width:600px) {
-    header h1 {
-        font-size: 30px;
-    }
-
-    .container {
-        margin: 0;
-        border-radius: 0;
-        padding: 20px;
-    }
-
-    table {
-        font-size: 13px;
-    }
-}
-</style>
+        #message{
+            margin-top:20px;
+            padding:15px;
+            background:#dcfce7;
+            border-radius:10px;
+        }
+    </style>
 </head>
 
 <body>
 
-<header>
+<div class="box">
+
     <h1>💰 PocketSmart AI</h1>
-    <p>Your Smart Budget Recommendation Assistant</p>
-</header>
+    <p style="text-align:center;">Smart Budget Assistant</p>
 
-<div class="container">
+    <h2>Monthly Budget</h2>
 
-    <h2>💵 Monthly Budget</h2>
+    <input id="income" type="number" value="30000"
+           placeholder="Monthly Income">
 
-    <div class="form-grid">
+    <select id="category">
+        <option>Food</option>
+        <option>Transport</option>
+        <option>Shopping</option>
+        <option>Bills</option>
+        <option>Entertainment</option>
+        <option>Health</option>
+        <option>Education</option>
+        <option>Other</option>
+    </select>
 
-        <div>
-            <label>Monthly Income (₹)</label>
-            <input type="number" id="income" value="30000" min="0">
-        </div>
+    <input id="amount" type="number"
+           placeholder="Expense Amount">
 
-        <div>
-            <label>Expense Category</label>
-            <select id="category">
-                <option>Food</option>
-                <option>Transport</option>
-                <option>Shopping</option>
-                <option>Bills</option>
-                <option>Entertainment</option>
-                <option>Health</option>
-                <option>Education</option>
-                <option>Other</option>
-            </select>
-        </div>
-
-        <div>
-            <label>Amount (₹)</label>
-            <input type="number" id="amount" placeholder="Enter amount" min="1">
-        </div>
-
-        <div>
-            <label>Date</label>
-            <input type="date" id="date">
-        </div>
-
-    </div>
-
-    <button class="add-btn" onclick="addExpense()">➕ Add Expense</button>
-    <button class="reset-btn" onclick="resetAll()">🔄 Reset</button>
-
-    <h2>📊 Budget Summary</h2>
+    <button onclick="addExpense()">➕ Add Expense</button>
+    <button onclick="resetAll()">🔄 Reset</button>
 
     <div class="cards">
 
         <div class="card">
-            <h3>Monthly Income</h3>
-            <p id="incomeDisplay">₹30,000</p>
+            <p>Income</p>
+            <b id="incomeShow">₹30,000</b>
         </div>
 
-        <div class="card spent">
-            <h3>Total Spent</h3>
-            <p id="spentDisplay">₹0</p>
+        <div class="card">
+            <p>Total Spent</p>
+            <b id="spent">₹0</b>
         </div>
 
-        <div class="card remaining">
-            <h3>Remaining</h3>
-            <p id="remainingDisplay">₹30,000</p>
+        <div class="card">
+            <p>Remaining</p>
+            <b id="remaining">₹30,000</b>
         </div>
 
-        <div class="card savings">
-            <h3>Suggested Saving</h3>
-            <p id="savingDisplay">₹4,500</p>
+        <div class="card">
+            <p>Saving Target</p>
+            <b id="saving">₹6,000</b>
         </div>
 
     </div>
 
-    <div id="message"></div>
+    <h2>🧾 Expenses</h2>
 
-    <h2>📈 Expense Chart</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
 
-    <div class="chart-container">
-        <canvas id="expenseChart"></canvas>
+        <tbody id="list">
+        </tbody>
+    </table>
+
+    <div id="message">
+        🤖 Enter your expenses to get a budget recommendation.
     </div>
-
-    <h2>📋 Expense History</h2>
-
-    <div style="overflow-x:auto;">
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Category</th>
-                    <th>Amount</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tbody id="expenseTable">
-            </tbody>
-
-        </table>
-
-    </div>
-
-    <h2>🤖 PocketSmart AI Tips</h2>
-
-    <div class="tip-box">
-
-        <ul id="tips">
-            <li>💡 Add your expenses to get personalized budget tips.</li>
-        </ul>
-
-    </div>
-
-    <footer>
-        <p>💰 PocketSmart AI | Smart Spending • Better Saving</p>
-    </footer>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
 
-let expenses = JSON.parse(localStorage.getItem("pocketExpenses")) || [];
+let expenses = [];
 
-const dateInput = document.getElementById("date");
-
-const today = new Date();
-dateInput.value = today.toISOString().split("T")[0];
-
-function formatMoney(amount) {
-    return "₹" + Number(amount).toLocaleString("en-IN");
+function money(value){
+    return "₹" + value.toLocaleString("en-IN");
 }
 
-function addExpense() {
+function addExpense(){
 
-    const category = document.getElementById("category").value;
-    const amount = Number(document.getElementById("amount").value);
-    const date = document.getElementById("date").value;
+    let income = Number(document.getElementById("income").value);
+    let category = document.getElementById("category").value;
+    let amount = Number(document.getElementById("amount").value);
 
-    if (!amount || amount <= 0) {
-        alert("Please enter a valid expense amount.");
+    if(income <= 0){
+        alert("Enter valid income");
+        return;
+    }
+
+    if(amount <= 0){
+        alert("Enter valid expense");
         return;
     }
 
     expenses.push({
-        category: category,
-        amount: amount,
-        date: date
+        category:category,
+        amount:amount
     });
-
-    saveData();
 
     document.getElementById("amount").value = "";
 
-    updateDashboard();
+    update();
 }
 
-function deleteExpense(index) {
+function deleteExpense(index){
 
-    expenses.splice(index, 1);
+    expenses.splice(index,1);
 
-    saveData();
-
-    updateDashboard();
+    update();
 }
 
-function saveData() {
+function update(){
 
-    localStorage.setItem(
-        "pocketExpenses",
-        JSON.stringify(expenses)
-    );
-}
+    let income = Number(document.getElementById("income").value);
 
-function resetAll() {
+    let total = 0;
 
-    if (confirm("Are you sure you want to delete all expenses?")) {
+    expenses.forEach(function(item){
+        total += item.amount;
+    });
 
-        expenses = [];
+    let remaining = income - total;
+    let saving = income * 0.20;
 
-        saveData();
+    document.getElementById("incomeShow").innerText = money(income);
+    document.getElementById("spent").innerText = money(total);
+    document.getElementById("remaining").innerText =
+        money(Math.max(remaining,0));
+    document.getElementById("saving").innerText = money(saving);
 
-        updateDashboard();
-    }
-}
+    let list = document.getElementById("list");
 
-function updateDashboard() {
+    list.innerHTML = "";
 
-    const income =
-        Number(document.getElementById("income").value) || 0;
+    expenses.forEach(function(item,index){
 
-    const total =
-        expenses.reduce((sum, item) => sum + item.amount, 0);
-
-    const remaining = income - total;
-
-    const suggestedSaving = income * 0.15;
-
-    document.getElementById("incomeDisplay").innerText =
-        formatMoney(income);
-
-    document.getElementById("spentDisplay").innerText =
-        formatMoney(total);
-
-    document.getElementById("remainingDisplay").innerText =
-        formatMoney(remaining);
-
-    document.getElementById("savingDisplay").innerText =
-        formatMoney(suggestedSaving);
-
-    displayTable();
-
-    createChart();
-
-    generateTips(income, total, remaining);
-}
-
-function displayTable() {
-
-    const table =
-        document.getElementById("expenseTable");
-
-    table.innerHTML = "";
-
-    if (expenses.length === 0) {
-
-        table.innerHTML = `
-        <tr>
-            <td colspan="4" style="text-align:center;">
-                No expenses added yet.
-            </td>
-        </tr>
-        `;
-
-        return;
-    }
-
-    expenses.forEach((expense, index) => {
-
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-            <td>${expense.date}</td>
-
-            <td>${expense.category}</td>
-
-            <td>${formatMoney(expense.amount)}</td>
-
-            <td>
-                <button
-                    class="delete-btn"
+        list.innerHTML += `
+            <tr>
+                <td>${item.category}</td>
+                <td>${money(item.amount)}</td>
+                <td>
+                    <button class="delete"
                     onclick="deleteExpense(${index})">
                     Delete
-                </button>
-            </td>
+                    </button>
+                </td>
+            </tr>
         `;
-
-        table.appendChild(row);
-
     });
+
+    recommendation(income,total);
 }
 
-let chart;
+function recommendation(income,total){
 
-function createChart() {
+    let percentage = (total / income) * 100;
 
-    const canvas =
-        document.getElementById("expenseChart");
+    let message = document.getElementById("message");
 
-    const ctx = canvas.getContext("2d");
+    if(percentage >= 100){
 
-    const categoryTotals = {};
+        message.innerHTML =
+        "⚠️ Expenses exceeded your income. Reduce spending immediately.";
 
-    expenses.forEach(expense => {
-
-        if (!categoryTotals[expense.category]) {
-            categoryTotals[expense.category] = 0;
-        }
-
-        categoryTotals[expense.category] += expense.amount;
-
-    });
-
-    if (chart) {
-        chart.destroy();
     }
+    else if(percentage >= 80){
 
-    if (Object.keys(categoryTotals).length === 0) {
-        return;
+        message.innerHTML =
+        "⚠️ You have used more than 80% of your income. Control unnecessary expenses.";
+
     }
+    else if(percentage >= 50){
 
-    chart = new Chart(ctx, {
+        message.innerHTML =
+        "💡 More than 50% is spent. Try to reduce expenses and increase savings.";
 
-        type: "doughnut",
+    }
+    else{
 
-        data: {
+        message.innerHTML =
+        "✅ Great! Your spending is under control. Keep saving 20% of your income.";
 
-            labels: Object.keys(categoryTotals),
-
-            datasets: [{
-                data: Object.values(categoryTotals)
-            }]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            plugins: {
-
-                legend: {
-                    position: "bottom"
-                }
-
-            }
-
-        }
-
-    });
-
+    }
 }
 
-function generateTips(income, total, remaining) {
+function resetAll(){
 
-    const tips =
-        document.getElementById("tips");
+    expenses = [];
 
-    tips.innerHTML = "";
+    document.getElementById("income").value = 30000;
+    document.getElementById("amount").value = "";
 
-    if (income <= 0) {
-
-        tips.innerHTML =
-        "<li>💡 Enter your monthly income to get budget tips.</li>";
-
-        return;
-    }
-
-    const spendingPercentage =
-        (total / income) * 100;
-
-    if (remaining < 0) {
-
-        tips.innerHTML +=
-        "<li>🚨 Your expenses are higher than your income. Try reducing non-essential spending.</li>";
-
-    } else {
-
-        tips.innerHTML +=
-        "<li>✅ Your current spending is within your income.</li>";
-
-    }
-
-    if (spendingPercentage > 80) {
-
-        tips.innerHTML +=
-        "<li>⚠️ You have spent more than 80% of your income. Be careful with remaining expenses.</li>";
-
-    } else if (spendingPercentage > 50) {
-
-        tips.innerHTML +=
-        "<li>💡 More than half of your income is already spent. Keep an eye on unnecessary purchases.</li>";
-
-    } else {
-
-        tips.innerHTML +=
-        "<li>🌟 Good job! Your spending is currently below 50% of your income.</li>";
-
-    }
-
-    const categoryTotals = {};
-
-    expenses.forEach(expense => {
-
-        if (!categoryTotals[expense.category]) {
-            categoryTotals[expense.category] = 0;
-        }
-
-        categoryTotals[expense.category] += expense.amount;
-
-    });
-
-    const categories =
-        Object.keys(categoryTotals);
-
-    if (categories.length > 0) {
-
-        const highestCategory =
-            categories.reduce((a, b) =>
-                categoryTotals[a] > categoryTotals[b] ? a : b
-            );
-
-        tips.innerHTML +=
-        `<li>📌 Your highest spending category is <b>${highestCategory}</b> (${formatMoney(categoryTotals[highestCategory])}).</li>`;
-
-    }
-
-    const savingGoal = income * 0.15;
-
-    if (remaining >= savingGoal) {
-
-        tips.innerHTML +=
-        `<li>💰 Great! You can aim to save around ${formatMoney(savingGoal)} (15% of income).</li>`;
-
-    } else {
-
-        tips.innerHTML +=
-        `<li>🎯 Try to reach a monthly saving target of ${formatMoney(savingGoal)}.</li>`;
-
-    }
-
+    update();
 }
 
 document.getElementById("income")
-.addEventListener("input", updateDashboard);
+.addEventListener("input",update);
 
-updateDashboard();
+update();
 
 </script>
 
